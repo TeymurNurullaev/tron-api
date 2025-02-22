@@ -311,6 +311,29 @@ class Tron implements TronInterface
         return $this->manager->isConnected();
     }
 
+
+
+    /*
+    Delegate bandwidth or energy resources to other accounts in Stake2.0.
+    */
+    public function deleGateResource(string $to, string $from, string $resurse, int $amountEnrg, int $time=0): array
+    {
+        $transaction = $this->transactionBuilder->indelegateresource($to, $from, $resurse, $amountEnrg, $time);
+        $signedTransaction = $this->signTransaction($transaction);
+        $response = $this->sendRawTransaction($signedTransaction);
+        return array_merge($response, $signedTransaction);
+    }
+    /*
+    Cancel the delegation of bandwidth or energy resources to other accounts in Stake2.0
+    */
+    public function UnDelegateResource(string $to, string $from, string $resurse, int $amountEnrg): array
+    {
+        $transaction = $this->transactionBuilder->inUnDelegateResource($to, $from, $resurse, $amountEnrg);
+        $signedTransaction = $this->signTransaction($transaction);
+        $response = $this->sendRawTransaction($signedTransaction);
+        return array_merge($response, $signedTransaction);
+    }
+
     /**
      * Last block number
      *
