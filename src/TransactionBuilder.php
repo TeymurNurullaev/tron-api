@@ -26,6 +26,46 @@ class TransactionBuilder
         $this->tron = $tron;
     }
 
+
+
+    /*
+    Delegate bandwidth or energy resources to other accounts in Stake2.0.
+    */
+    public function indelegateresource(string $to, string $from, string $resurse, int $amountEnrg, int $time=0)
+    {
+        if ($from === $to) {
+            throw new TronException('Cannot transfer TRX to the same account');
+        }
+        $options = [
+            'owner_address' => $from,
+            'receiver_address' => $to,
+            'resource' => $resurse,
+            'balance' =>  $amountEnrg,
+            'lock' => false,
+            "visible" => true
+        ];
+        return $this->tron->getManager()->request('wallet/delegateresource', $options);
+    }
+    /*
+    Cancel the delegation of bandwidth or energy resources to other accounts in Stake2.0
+    */
+    public function inUnDelegateResource(string $to, string $from, string $resurse, int $amountEnrg)
+    {
+        if ($from === $to) {
+            throw new TronException('Cannot transfer TRX to the same account');
+        }
+        $options = [
+            'owner_address' => $from,
+            'receiver_address' => $to,
+            'resource' => $resurse,
+            'balance' =>  $amountEnrg,
+            "visible" => true
+        ];
+        return $this->tron->getManager()->request('wallet/undelegateresource', $options);
+    }
+	
+	
+
     /**
      * Creates a transaction of transfer.
      * If the recipient address does not exist, a corresponding account will be created on the blockchain.
